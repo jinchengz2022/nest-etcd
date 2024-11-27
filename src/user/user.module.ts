@@ -4,6 +4,7 @@ import { UserController } from './user.controller';
 import { EtcdService } from 'src/etcd/etcd.service';
 import { EtcdModule } from 'src/etcd/etcd.module';
 import { ConfigService } from '@nestjs/config';
+import { NacosModule } from 'src/nacos/nacos.module';
 
 @Module({
   controllers: [UserController],
@@ -21,6 +22,7 @@ import { ConfigService } from '@nestjs/config';
       },
       inject: [ConfigService]
     }),
+    NacosModule
   ],
 })
 export class UserModule {}

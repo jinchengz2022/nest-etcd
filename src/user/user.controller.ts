@@ -4,6 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Etcd3 } from 'etcd3';
 import { EtcdService } from 'src/etcd/etcd.service';
+import { NacosService } from 'src/nacos/nacos.service';
 
 @Controller('user')
 export class UserController {
@@ -11,6 +12,9 @@ export class UserController {
 
   @Inject(EtcdService)
   private etcdService: EtcdService;
+
+  @Inject(NacosService)
+  private nacosService: NacosService;
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
@@ -29,9 +33,14 @@ export class UserController {
     return res;
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @Post('saveNacos')
+  saveNacos(@Body() params: any) {
+    return this.nacosService.register(params.key, params.instance);
+  }
+
+  @Post('delNacos')
+  delNacos(@Body() params: any) {
+    return this.nacosService.deRegister(params.key, params.instance);
   }
 
   @Delete(':id')
